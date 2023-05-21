@@ -1,0 +1,42 @@
+logging:
+  level: INFO
+  loggers:
+    "io.dropwizard": INFO
+    "org.hibernate.SQL":
+      level: DEBUG
+      additive: false
+      appenders:
+        - type: file
+          currentLogFilename: /Users/anilacharya/logs/sql.log
+          archivedLogFilenamePattern: /Users/anilacharya/logs/sql-%d.log.gz
+          archivedFileCount: 5
+  appenders:
+    - type: console
+
+server:
+  requestLog:
+    appenders:
+      - type: console
+  applicationConnectors:
+    - type: http
+      port: 7000
+database:
+  driverClass: org.h2.Driver
+  user: sa
+  password:
+  url: jdbc:h2:mem:sample
+
+  properties:
+    charSet: UTF-8
+    hibernate.dialect: org.hibernate.dialect.H2Dialect
+    hibernate.hbm2ddl.auto: create
+    hibernate.show_sql: true
+    hibernate.format_sql: true
+    hibernate.use_sql_comments: true
+  validationQuery: "/* MyApplication Health Check */ SELECT 1"
+  minSize: 8
+  maxSize: 32
+  checkConnectionWhileIdle: true
+
+
+
