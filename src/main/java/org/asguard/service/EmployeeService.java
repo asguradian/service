@@ -8,6 +8,7 @@ import org.asguard.service.model.Employee;
 import org.joda.time.DateTime;
 
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
@@ -42,10 +43,13 @@ public class EmployeeService {
     }
 
     @POST
-    @Path("/text")
-    @Produces("text/plain")
-    public Response mediaTypeText( String input) {
-        return Response.ok(input).build();
+    @Path("/employeeName/{id}")
+    @Consumes(value = "text/plain")
+    @UnitOfWork
+    public Response mediaTypeText( String body, @PathParam("id") Long id) {
+        Employee employee =employeeDao.findById(id);
+        String response = new StringBuilder(body).append("\n").append(employee.getFirstName()).toString();
+        return Response.ok(response, MediaType.TEXT_PLAIN_TYPE).build();
     }
 
 }
